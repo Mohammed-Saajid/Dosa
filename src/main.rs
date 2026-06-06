@@ -6,6 +6,10 @@ use std::{
 	path::{Path, PathBuf},
 	process::Command,
 };
+mod core;
+use core::config::read_config_file;
+
+use crate::core::config::{Config, load_config};
 
 #[derive(Debug, Clone)]
 struct Project {
@@ -14,7 +18,23 @@ struct Project {
 }
 
 fn main() -> Result<()> {
-	let projects_dir: PathBuf = get_projects_directory()?;
+    let config_file= read_config_file();
+	println!("{:#?}",config_file);
+
+	let config = match config_file {
+		Ok(contents) => {
+			load_config(&contents)?
+		},
+		Err(_) => {
+			Config{
+				default_code_editor:String::from("code"),
+				default_projects_dir:String::from("HOME")
+			}
+		}
+	};
+	
+
+	let projects_dir = Path::new(&config.default_projects_dir);
 
 	let projects: Vec<Project> = discover_projects(&projects_dir)?;
 

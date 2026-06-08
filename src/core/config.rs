@@ -12,7 +12,7 @@ pub fn read_config_file() -> Result<String> {
     let home = env::var("HOME")
         .context("Failed to Read Home Directory")?;
 
-    let config_path = PathBuf::from(home).join(".dosaconfig");
+    let config_path = PathBuf::from(home).join("dosaconfig.toml");
 
     let content = fs::read_to_string(&config_path)
         .context("NO DOSA")?;

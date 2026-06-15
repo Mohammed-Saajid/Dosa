@@ -1,7 +1,6 @@
 use anyhow::{Context, Ok, Result};
 use std::{
-    fs,
-    path::{Path, PathBuf},
+    path::{Path},
     process::Command,
 };
 pub enum Editor {

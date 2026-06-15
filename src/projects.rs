@@ -1,10 +1,9 @@
+use anyhow::{Context, Result};
+use dialoguer::Select;
 use std::{
     fs,
     path::{Path, PathBuf},
-    process::Command,
 };
-use anyhow::{Context, Result};
-use dialoguer::Select;
 
 #[derive(Debug, Clone)]
 pub struct Project {

@@ -9,12 +9,12 @@ What it is
 What it does
 - Searches your `$HOME/Projects` directory for folders.
 - Shows an interactive menu to pick a project.
-- Opens the chosen project in Visual Studio Code via the `code` CLI.
+- Opens the chosen project in Text editor.
 - Useful for quickly jumping into a project without typing paths.
 
 Quick start
 - Build: `cargo build --release`
-- Run: `cargo run --`
+- Run: `cargo run`
 
 Example
 - After building: `./target/release/dosa --help`

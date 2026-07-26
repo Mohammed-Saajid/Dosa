@@ -18,7 +18,13 @@ fn main() -> Result<()> {
         return Ok(());
     }
 
-    let selection: usize = select_project(&projects)?;
+    let selection: usize = match select_project(&projects) {
+        Ok(index) => index,
+        Err(_) => {
+            println!("No Project Selected");
+            return Ok(());
+        }
+    };
     if let Some(editor) = Editor::from_str(&config.code_editor) {
         editor.launch(&projects[selection].path)?
     } else {

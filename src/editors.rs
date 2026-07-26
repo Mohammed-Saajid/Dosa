@@ -1,8 +1,5 @@
 use anyhow::{Context, Ok, Result};
-use std::{
-    path::{Path},
-    process::Command,
-};
+use std::{path::Path, process::Command};
 pub enum Editor {
     VSCode,
     NeoVim,

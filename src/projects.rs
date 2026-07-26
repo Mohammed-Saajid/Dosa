@@ -1,9 +1,10 @@
 use anyhow::{Context, Result};
-use dialoguer::Select;
+use dialoguer::{FuzzySelect, theme::SimpleTheme};
 use std::{
     fs,
     path::{Path, PathBuf},
 };
+use toml::value::Index;
 
 #[derive(Debug, Clone)]
 pub struct Project {
@@ -40,11 +41,15 @@ pub fn select_project(projects: &[Project]) -> Result<usize> {
         .map(|project| project.name.as_str())
         .collect();
 
-    let selection = Select::new()
-        .with_prompt("Select a project")
-        .items(&project_names)
+    let selection = FuzzySelect::with_theme(&SimpleTheme)
+        .with_prompt("Type to Filter Projects")
         .default(0)
-        .interact()?;
+        .items(&project_names)
+        .interact_opt()
+        .context("Failed to read Selection Prompt")?;
 
-    Ok(selection)
+    match selection {
+        Some(index) => Ok(index),
+        None => anyhow::bail!("Selection Cancelled by user"),
+    }
 }

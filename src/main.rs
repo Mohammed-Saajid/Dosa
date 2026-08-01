@@ -1,37 +1,28 @@
 use anyhow::Result;
+use clap::Parser;
 use std::path::Path;
+mod cli;
 mod core;
 mod editors;
 mod projects;
-use crate::core::config::Config;
-use crate::editors::Editor;
-use crate::projects::{Project, discover_projects, select_project};
+use crate::cli::main_struct::{Cli, Commands};
+use crate::core::config::{Config};
+use crate::projects::{
+    create_project_dir, project_picker,
+};
 
 fn main() -> Result<()> {
+    let args = Cli::parse();
     let config = Config::load_config()?;
-
     let projects_dir = Path::new(&config.projects_dir);
-    let projects: Vec<Project> = discover_projects(&projects_dir)?;
 
-    if projects.is_empty() {
-        println!("No projects found in {}", projects_dir.display());
-        return Ok(());
-    }
-
-    let selection: usize = match select_project(&projects) {
-        Ok(index) => index,
-        Err(_) => {
-            println!("No Project Selected");
-            return Ok(());
+    match args.command {
+        Some(Commands::New { name }) => {
+            create_project_dir(projects_dir, &name)?;
         }
-    };
-    if let Some(editor) = Editor::from_str(&config.code_editor) {
-        editor.launch(&projects[selection].path)?
-    } else {
-        panic!(
-            "{}",
-            format!("Code Editor {} still not supported.", &config.code_editor)
-        );
+        None => {
+            project_picker(projects_dir, &config)?;
+        }
     }
 
     Ok(())

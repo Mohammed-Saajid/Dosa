@@ -4,7 +4,8 @@ use std::{
     fs,
     path::{Path, PathBuf},
 };
-use toml::value::Index;
+
+use crate::{core::config::Config, editors::Editor};
 
 #[derive(Debug, Clone)]
 pub struct Project {
@@ -52,4 +53,43 @@ pub fn select_project(projects: &[Project]) -> Result<usize> {
         Some(index) => Ok(index),
         None => anyhow::bail!("Selection Cancelled by user"),
     }
+}
+
+pub fn create_project_dir(projects_dir: &Path, name: &str) -> Result<()> {
+    let project_path = projects_dir.join(name);
+    if project_path.exists() {
+        anyhow::bail!(
+            "Project Directory already exists: {}",
+            project_path.display()
+        );
+    }
+    fs::create_dir_all(&project_path)?;
+    println!("Project Directory created at : {}", project_path.display());
+    Ok(())
+}
+
+pub fn project_picker(projects_dir: &Path, config: &Config) -> Result<()> {
+    let projects: Vec<Project> = discover_projects(projects_dir)?;
+
+    if projects.is_empty() {
+        println!("No projects found in {}", projects_dir.display());
+        return Ok(());
+    }
+
+    let selection: usize = match select_project(&projects) {
+        Ok(index) => index,
+        Err(_) => {
+            println!("No Project Selected");
+            return Ok(());
+        }
+    };
+    if let Some(editor) = Editor::from_str(&config.code_editor) {
+        editor.launch(&projects[selection].path)
+    } else {
+        panic!(
+            "{}",
+            format!("Code Editor {} still not supported.", &config.code_editor)
+        );
+    }?;
+    Ok(())
 }

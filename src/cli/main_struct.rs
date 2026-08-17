@@ -11,4 +11,6 @@ pub struct Cli {
 pub enum Commands {
     #[command(name = "new", about = "Create New Project")]
     New { name: String },
+    #[command(name = "delete", about = "Delete Project")]
+    Delete { name: String},
 }

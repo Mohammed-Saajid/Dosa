@@ -93,3 +93,16 @@ pub fn project_picker(projects_dir: &Path, config: &Config) -> Result<()> {
     }?;
     Ok(())
 }
+
+pub fn delete_project(projects_dir: &Path, name: &str) -> Result<()> {
+    let project_path = projects_dir.join(name);
+    if !project_path.exists() {
+        anyhow::bail!(
+            "Project Directory does not exist: {}",
+            project_path.display()
+        );
+    }
+    fs::remove_dir_all(&project_path)?;
+    println!("Project Directory deleted at : {}", project_path.display());
+    Ok(())
+}

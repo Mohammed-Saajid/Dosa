@@ -8,7 +8,7 @@ mod projects;
 use crate::cli::main_struct::{Cli, Commands};
 use crate::core::config::{Config};
 use crate::projects::{
-    create_project_dir, project_picker,
+    create_project_dir, project_picker, delete_project
 };
 
 fn main() -> Result<()> {
@@ -19,6 +19,9 @@ fn main() -> Result<()> {
     match args.command {
         Some(Commands::New { name }) => {
             create_project_dir(projects_dir, &name)?;
+        }
+        Some(Commands::Delete { name }) => {
+            delete_project(projects_dir, &name)?;
         }
         None => {
             project_picker(projects_dir, &config)?;

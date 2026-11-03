@@ -20,6 +20,7 @@ Perfect for developers who manage multiple projects and want a frictionless work
 - Multi-editor support – VS Code and NeoVim (As of now)
 - Easy configuration – Simple TOML-based configuration file
 - Persistent config – Configuration stored in your home directory
+- Global and project-specific todo lists
 
 ## Installation
 
@@ -79,6 +80,26 @@ dosa delete <project-name>
 ```
 
 Removes a project directory.
+
+#### Manage Todos
+
+Global todos are stored in `~/.dosa-todos.toml`:
+
+```bash
+dosa todo add "Review pull request"
+dosa todo list
+dosa todo complete 1
+dosa todo remove 1
+```
+
+Project todos are stored in the project directory as `.dosa-todos.toml`:
+
+```bash
+dosa project my-project add "Update dependencies"
+dosa project my-project list
+dosa project my-project complete 1
+dosa project my-project remove 1
+```
 
 ## Configuration
 

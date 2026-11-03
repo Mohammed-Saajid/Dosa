@@ -14,8 +14,6 @@ pub struct Project {
 }
 
 pub fn discover_projects(projects_dir: &Path) -> Result<Vec<Project>> {
-    let home = dirs::home_dir().unwrap();
-    let projects_dir = PathBuf::from(home).join(projects_dir);
     let mut projects = Vec::new();
 
     for entry in fs::read_dir(&projects_dir)
